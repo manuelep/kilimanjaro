@@ -1,6 +1,5 @@
 # kilimanjaro
-
-    My programming cheese shop.
+    > My programming cheese shop.
 
 Generic tools I want to bring almost always with me
 
