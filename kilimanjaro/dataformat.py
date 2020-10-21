@@ -64,7 +64,6 @@ class fileOmeter(object):
         self.path = path
         self.partials = {}
         self.tot = 0
-        self.logger = setUpGenericLogger()
 
     @classmethod
     def new(cls, path, **kw):
@@ -84,8 +83,8 @@ class fileOmeter(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         """ """
         for path, dim in sorted(self.partials.items(), key=lambda c: c[1]):
-            self.logger.info("{} - {}".format(path, smartbytes(dim)))
-        self.logger.info("Total length: {}".format(smartbytes(self.tot)))
+            logger.info("{} - {}".format(path, smartbytes(dim)))
+        logger.info("Total length: {}".format(smartbytes(self.tot)))
 
     def count(self, name, path=None, flt=lambda f, p: True):
         file_path = os.path.join(path, name)
@@ -95,7 +94,7 @@ class fileOmeter(object):
                 file_size = file_info.st_size
                 self.tot += file_size
 
-                self.logger.info("{} - {}".format(name, smartbytes(file_size)))
+                logger.info("{} - {}".format(name, smartbytes(file_size)))
 
                 if not path is None:
                     try:
