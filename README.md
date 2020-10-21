@@ -7,4 +7,4 @@ Generic tools I want to bring almost always with me
 
 1. Why [Kilimanjaro](https://en.wikipedia.org/wiki/Kilimanjaro_Expedition)?
 
-    > Because [CheeseShop](https://en.wikipedia.org/wiki/Cheese_Shop_sketch) was already taken.
+    > Because [CheeseShop](https://en.wikipedia.org/wiki/Cheese_Shop_sketch) was [already taken](https://wiki.python.org/moin/CheeseShop).
