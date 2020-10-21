@@ -10,13 +10,13 @@ class FaderTestCase(TestCase):
     def test_with_colortona(self):
 
         myscale = colors["colortona"]["Hold"]["5"]
-        res = colorScaleFader(.25437, myscale)
-
-        self.assertIsInstance(res, str)
+        for value in [.12, .93]:
+            res = colorScaleFader(value, myscale)
+            self.assertIsInstance(res, str)
 
     def test_with_colorbrewer(self):
 
         myscale = list(map(parse, colors["colorbrewer"]["Spectral"]["5"]))
-        res = colorScaleFader(.25437, myscale)
-
-        self.assertIsInstance(res, str)
+        for value in [.12, .93]:
+            res = colorScaleFader(value, myscale)
+            self.assertIsInstance(res, str)
