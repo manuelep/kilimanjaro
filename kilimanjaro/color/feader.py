@@ -26,7 +26,7 @@ def colorScaleFader(value, color_scale):
     color_scale @string[] :
     """
 
-    unit = 1./len(color_scale)
+    unit = 1./(len(color_scale)-1)
     idx = int(value//unit)
     c1, c2 = color_scale[idx:idx+2]
 
