@@ -67,6 +67,7 @@ AND pid <> pg_backend_pid();""", dbname=dbname)
                     for ext in extensions[uri]:
                         _curs_exec_(curs, "CREATE EXTENSION {};".format(ext))
 
+
 def pgteardown(hostname, port, puser, ppass, uris, **__):
     """ """
 

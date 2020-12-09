@@ -16,7 +16,6 @@ def brap(**defaults):
     Variables declared in function signature will be taken from request and
     decoded as they were json string before being passed to the function.
 
-    args : Positional arguments that will be passed without casting to the function.
     defaults : Default values that will overwrite the ones defined in signature.
     """
     def decorator(func):
@@ -64,7 +63,7 @@ class LocalsOnly(Fixture):
 
 
 class CORS(Fixture):
-    """docstring for CORS."""
+    """ Fixture helper for sharing web service avoiding cross origin resource sharing problems """
 
     def __init__(self, age=86400, origin="*", headers="*", methods="*"):
         super(CORS, self).__init__()

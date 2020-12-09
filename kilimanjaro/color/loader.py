@@ -2,10 +2,6 @@
 
 import json, os
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import numpy as np
-
 DIR = "resources"
 PATH = os.path.join(os.path.dirname(__file__), DIR)
 
