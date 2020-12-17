@@ -11,6 +11,52 @@ def unjson(value):
     except (json.decoder.JSONDecodeError, TypeError,):
         return value
 
+def webio(func, **defaults):
+    kwargs = {}
+    sign = signature(func).parameters
+    for key,parameter in sign.items():
+        if parameter.default==_empty:
+            if key in request.query:
+                kwargs[key] = unjson(request.query[key])
+            elif request.json and (key in request.json):
+                kwargs[key] = request.json[key]
+            elif key in defaults:
+                kwargs[key] = defaults[key]
+
+        elif key in request.query:
+            kwargs[key] = unjson(request.query[key])
+        elif request.json and (key in request.json):
+            kwargs[key] = request.json[key]
+        elif key in defaults:
+            kwargs[key] = defaults[key]
+        else:
+            kwargs[key] =  parameter.default
+
+    if not request.query is None:
+        kwargs.update({k: unjson(v) for k,v in request.query.items() if not k in sign})
+    elif not request.json is None:
+        kwargs.update({k: v for k,v in request.json.items() if not k in sign})
+    kwargs.update({k: v for k,v in defaults.items() if not k in sign})
+    return kwargs
+
+class WebWrapper(Fixture):
+    """docstring for WebWrapper."""
+
+    def __init__(self, **defaults):
+        super(WebWrapper, self).__init__()
+        self.defaults = defaults
+        self.update = self.defaults.update
+        self.__setitem__ = self.defaults.__setitem__
+
+    def parse_request(self, func):
+        return webio(func, **self.defaults)
+
+    def __call__(self, func):
+        def wrapper():
+            return func(**webio(func, **self.defaults))
+        return wrapper
+
+
 def brap(**defaults):
     """ web wrapper
     Variables declared in function signature will be taken from request and
