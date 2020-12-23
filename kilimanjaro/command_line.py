@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
 
-from kilimanjaro.dbutils.wiz import Wiz as ConnCollector
+from .dbutils.wiz import Wiz as ConnCollector
 import argparse
-import os, sys, importlib
+import os
+import sys
+import importlib
+
 
 def hello():
     print("Hello world!")
 
+
 def dbgenie_(DB_FOLDER, DB_URI, *extensions):
     dbcollector = ConnCollector(
-        path = DB_FOLDER,
-        cache = None
+        path=DB_FOLDER,
+        cache=None
     )
     dbcollector.collect(DB_URI, *extensions)
     dbcollector.setup()
+
 
 def dbgenie():
     parser = argparse.ArgumentParser(
         description = """This helper commend takes case of creating PostgreSQL
         database with all required extensions (if available).""",
         formatter_class = argparse.RawTextHelpFormatter
-    ))
+    )
     parser.add_argument("settings",
         help = 'Path for application settings file containing at least DB_FOLDER and DB_URI variables',
         required = True
