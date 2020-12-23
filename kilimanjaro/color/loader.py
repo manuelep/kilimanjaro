@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import json, os
+import os
+import json
 
 DIR = "resources"
 PATH = os.path.join(os.path.dirname(__file__), DIR)
 
-"""
-Resources for Colorbrewer:
-    * Home: https://colorbrewer2.org
-    * Repository: https://github.com/axismaps/colorbrewer/
-    * All scales: https://github.com/axismaps/colorbrewer/blob/master/export/colorbrewer.json
-"""
 
 class Colors(dict):
     """docstring for Colors."""
