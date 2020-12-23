@@ -22,4 +22,5 @@ class Colors(dict):
                 with open(os.fsencode(os.path.join(PATH, filename))) as source:
                     self[fname] = json.load(source)
 
+
 colors = Colors()

@@ -28,5 +28,8 @@ setuptools.setup(
         "py4web",
         "psycopg2"
     ],
+    entry_points = {
+        'console_scripts': ['dbgenie=kilimanjaro.command_line:dbgenie', 'hello=kilimanjaro.command_line:hello'],
+    },
     zip_safe=False
 )

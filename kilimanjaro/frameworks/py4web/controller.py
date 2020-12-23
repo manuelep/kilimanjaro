@@ -37,6 +37,7 @@ def webio(func, **defaults):
     elif not request.json is None:
         kwargs.update({k: v for k,v in request.json.items() if not k in sign})
     kwargs.update({k: v for k,v in defaults.items() if not k in sign})
+
     return kwargs
 
 class WebWrapper(Fixture):
@@ -48,10 +49,12 @@ class WebWrapper(Fixture):
         self.update = self.defaults.update
         self.__setitem__ = self.defaults.__setitem__
 
-    def parse_request(self, func):
+    def parse_request(self, func, **defaults):
+        self.update(defaults)
         return webio(func, **self.defaults)
 
-    def __call__(self, func):
+    def __call__(self, func, **defaults):
+        self.update(defaults)
         def wrapper():
             return func(**webio(func, **self.defaults))
         return wrapper
