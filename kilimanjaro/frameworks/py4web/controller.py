@@ -4,7 +4,8 @@ from py4web.core import Fixture, HTTP
 from py4web import request, response
 from inspect import signature, _empty
 import json
-
+import pandas as pd
+from io import BytesIO
 def unjson(value):
     try:
         return json.loads(value)
@@ -27,6 +28,8 @@ def webio(func, **defaults):
             kwargs[key] = unjson(request.query[key])
         elif request.json and (key in request.json):
             kwargs[key] = request.json[key]
+        elif key in request.params:
+            kwargs[key] = unjson(request.params[key])
         elif key in defaults:
             kwargs[key] = defaults[key]
         else:
@@ -127,3 +130,39 @@ class CORS(Fixture):
         response.headers["Access-Control-Allow-Headers"] = self.headers
         response.headers["Access-Control-Allow-Methods"] = self.methods
         response.headers["Access-Control-Allow-Credentials"] = "true"
+
+class AsXlsx(Fixture):
+    """ Export the output to excel format """
+
+    def __init__(self, filename='export', columns=None, index=False):
+        """
+        filename @string : Name of the downloading file
+        columns @list : Sorted list of the column names to export
+        """
+        self.filename = filename
+        self.columns = columns
+        self.index = index
+
+    def on_success(self, status):
+        # called when a request is successful
+        if status==200:
+            response.headers["Content-Type"] = "application/vnd.ms-excel"
+            response.headers["Content-Disposition"] = f'inline; filename="{self.filename}.xlsx"'
+
+    def transform(self, output, shared_data=None):
+        """
+        output @dict : The decorated controller must returns a dictionary with
+            the data to export divided by worksheet.
+        Doc:
+            Courtesy of:
+                * https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.ExcelWriter.html
+                * https://xlsxwriter.readthedocs.io/example_pandas_multiple.html
+        """
+        stream = BytesIO()
+        with pd.ExcelWriter(stream, engine='xlsxwriter') as writer:
+            for sensor, data in output.items():
+                df = pd.DataFrame(data)
+                df.to_excel(writer, sheet_name=sensor, columns=self.columns, index=self.index)
+
+        stream.seek(0)
+        return stream.read()
