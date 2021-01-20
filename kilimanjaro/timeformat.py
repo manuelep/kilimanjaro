@@ -3,6 +3,48 @@
 
 from datetime import datetime, date
 
+def smartdelta(dt, use_suffix=True, k='n'):
+
+    if not use_suffix:
+        suffix = ''
+    elif dt.days < 0:
+        suffix = ' from now'
+        dt = -dt
+    else:
+        suffix = ' ago'
+
+
+    if dt.days >= 365:
+        value = int(dt.days // 365)
+        unit = f"{{{k}:d}} years"
+    elif dt.days >= 27:
+        value = int(dt.days // 30)
+        unit = f"{{{k}:d}} months"
+    elif dt.days >= 7:
+        value = int(dt.days // 7)
+        unit = f"{{{k}:d}} weeks"
+    elif dt.days >= 1:
+        value = dt.days
+        unit = f"{{{k}:d}} days"
+    elif dt.seconds >= 60 * 60:
+        value = int(dt.seconds // 3600)
+        unit = f"{{{k}:d}} hours"
+    elif dt.seconds >= 60:
+        value = int(dt.seconds // 60)
+        unit = f"{{{k}:d}} minutes"
+    elif dt.seconds >= 10:
+        value = dt.seconds
+        unit = f"{{{k}:d}} seconds"
+    elif dt.seconds >=1 :
+        value = dt.total_seconds()
+        unit = f"{{{k}:.3f}} seconds"
+    else:
+        value = dt.total_seconds() * 1000
+        unit = f"{{{k}:.3f}} milliseconds"
+
+    return f"{unit}{suffix}", value,
+
+
 def prettydelta(dt, T=lambda x: x, use_suffix=True):
 
     if not use_suffix:
@@ -60,3 +102,7 @@ def prettydate(d, utc=False, **kw):
         raise NotImplementedError
 
     return prettydelta(dt, **kw)
+
+if __name__=='__main__':
+    from datetime import timedelta
+    print(smartdelta(timedelta(seconds=62)))
