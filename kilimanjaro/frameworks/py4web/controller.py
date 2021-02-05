@@ -12,6 +12,12 @@ def unjson(value):
     except (json.decoder.JSONDecodeError, TypeError,):
         return value
 
+def check_key_in_params(key):
+    try:
+        return (key in request.params)
+    except KeyError:
+        return False
+
 def webio(func, **defaults):
     kwargs = {}
     sign = signature(func).parameters
@@ -28,7 +34,7 @@ def webio(func, **defaults):
             kwargs[key] = unjson(request.query[key])
         elif request.json and (key in request.json):
             kwargs[key] = request.json[key]
-        elif key in request.params:
+        elif check_key_in_params(key):
             kwargs[key] = unjson(request.params[key])
         elif key in defaults:
             kwargs[key] = defaults[key]
